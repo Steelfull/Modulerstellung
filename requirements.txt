@@ -1,0 +1,5 @@
+Flask==2.3.2
+Flask-SQLAlchemy==3.0.3
+python-docx==0.8.11
+reportlab==3.6.13
+WeasyPrint==57.0
