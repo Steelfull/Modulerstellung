@@ -1,0 +1,156 @@
+/* Allgemeine Stile für das Formular */
+.form-card {
+    background-color: white;              /* Weißer Hintergrund für das Formular */
+    padding: 20px;                        /* Innenabstand */
+    border-radius: 10px;                  /* Abgerundete Ecken */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Schatten für Tiefe */
+    margin: 50px auto;                    /* Abstand von oben und zentrieren */
+    max-width: 700px;                     /* Maximale Breite */
+}
+
+/* Input-Felder, Textareas und Selects bei Fokus hervorheben */
+input:focus, textarea:focus, select:focus {
+    border-color: #007bff;                /* Blaue Umrandung bei Fokus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);  /* Leuchtender Schatten */
+    outline: none;                        /* Standardumrandung entfernen */
+}
+
+/* Schaltflächenstile */
+button {
+    background-color: #007bff;            /* Standard-Hintergrundfarbe */
+    color: white;                         /* Weiße Schriftfarbe */
+    padding: 10px 20px;                   /* Abstand innerhalb des Buttons */
+    border: none;                         /* Rand entfernen */
+    border-radius: 5px;                   /* Abgerundete Ecken */
+    transition: all 0.3s ease;            /* Sanfte Übergänge bei Hover */
+}
+
+button:hover {
+    background-color: #0056b3;            /* Dunklere Farbe bei Hover */
+    transform: translateY(-2px);          /* Button hebt sich leicht an */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);  /* Schatten bei Hover */
+}
+
+/* Hintergrund für die gesamte Seite */
+body {
+    background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);  /* Leichter Farbverlauf */
+    font-family: Arial, sans-serif;       /* Schriftart der Seite */
+}
+
+/* Fortschrittsbalken - fixed position */
+.progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Der Fortschrittsbalken erstreckt sich über die gesamte Breite */
+    background-color: #f3f3f3;
+    border-radius: 0; /* Ecken anpassen, damit es wie eine obere Leiste aussieht */
+    z-index: 1000; /* Der Fortschrittsbalken bleibt über dem Inhalt */
+}
+
+.progress-bar {
+    width: 0%;
+    height: 10px; /* Dünner Fortschrittsbalken */
+    background-color: #007bff;
+    transition: width 0.3s ease;
+}
+
+.btn-danger {
+    margin-top: 5pt; /* Abstand oben */
+}
+
+.info-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-left: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.info-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-left: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.info-icon img {
+    width: 100%;
+    height: auto;
+}
+
+.info-icon:focus::after,
+.info-icon:hover::after {
+    content: attr(aria-label);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeInTooltip 0.3s forwards;
+}
+
+@keyframes fadeInTooltip {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-check {
+    position: relative;
+    padding-left: 30px; /* Abstand für die Checkbox */
+    margin-bottom: 15px;
+}
+
+.form-check-input {
+    position: absolute;
+    opacity: 0; /* Verstecke die originale Checkbox */
+    cursor: pointer;
+}
+
+.form-check-label {
+    position: relative;
+    padding: 10px;
+    border: 0.5px solid #cccaca; /* Bootstrap Primary Color */
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 30px; /* Abstand für das Häkchen */
+}
+
+.form-check-input:checked + .form-check-label {
+    background-color: #007bff; /* Bootstrap Primary Color */
+    color: white;
+    border-color: #333; /* Dunklere Farbe für den Rand, wenn aktiviert */
+}
+
+.form-check-input:checked + .form-check-label:before {
+    content: "✔"; /* Häkchen-Symbol */
+    position: absolute;
+    left: -20px; /* Abstand zum Text */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px; /* Größe des Häkchens */
+    color: white;
+}
+
+.form-check-input:focus + .form-check-label {
+    box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.5); /* Fokus-Effekt */
+}
+

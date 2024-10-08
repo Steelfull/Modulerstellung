@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulbeschreibung</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Funktion zur Berechnung der Gesamtstunden in Echtzeit
+        function calculateTotalHours() {
+            const presenceTime = parseInt(document.getElementById('presence_time').value) || 0;
+            const selfStudyTime = parseInt(document.getElementById('self_study_time').value) || 0;
+            const totalHours = presenceTime + selfStudyTime;
+    
+            // Aktualisiere das Eingabefeld für Gesamtstunden
+            document.getElementById('total_hours').value = totalHours;
+        }
+    
+        // Fortschrittsbalken-Update Funktion
+        document.addEventListener('DOMContentLoaded', function() {
+            const formFields = document.querySelectorAll('input, textarea, select');
+            const progressBar = document.getElementById('progress-bar');
+    
+            // Funktion zur Aktualisierung des Fortschrittsbalkens
+            function updateProgressBar() {
+                let filledFields = 0;
+    
+                // Zähle ausgefüllte Felder
+                formFields.forEach(field => {
+                    if (field.value.trim() !== "") {
+                        filledFields++;
+                    }
+                });
+    
+                // Berechne den Prozentsatz der ausgefüllten Felder
+                const progressPercentage = (filledFields / formFields.length) * 100;
+                progressBar.style.width = progressPercentage + '%';
+            }
+    
+            // Überwache Änderungen in den Formularfeldern
+            formFields.forEach(field => {
+                field.addEventListener('input', updateProgressBar);
+            });
+    
+            // AJAX-Anfrage zur Speicherung des Moduls
+            document.querySelector('form').onsubmit = function(event) {
+                event.preventDefault(); // Verhindert die Standard-Formularübertragung
+    
+                const formData = new FormData(this); // Holt die Formulardaten
+    
+                fetch('/save', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Popup bei erfolgreichem Speichern
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Erfolg!',
+                            text: data.message,
+                        }).then(() => {
+                            // Nach dem Schließen des Popups zur Module-Liste weiterleiten
+                            window.location.href = '/modules';
+                        });
+                    } else {
+                        // Popup bei Fehler
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Fehler!',
+                            text: data.message,
+                        });
+                    }
+                })
+                .catch(error => {
+                    // Popup bei Netzwerkfehler
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fehler!',
+                        text: 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.',
+                    });
+                });
+            }
+        });
+    </script>
+    
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Modulverwaltung</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('main.index') }}">Startseite</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.list_modules') }}">Module anzeigen</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    
+    
+    <div class="container mt-4">
+        <h1>Modulbeschreibung erstellen</h1>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <form method="POST" action="/save">
+            <div class="form-card">
+
+                <h1>Übersicht</h1>
+
+            <div class="form-group">
+                <label for="module_name">Modulbezeichnung</label>
+                <input type="text" class="form-control" id="module_name" name="module_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="module_code">Modulkürzel</label>
+                <input type="text" class="form-control" id="module_code" name="module_code">
+            </div>
+
+            <div class="form-group">
+                <label for="department">Fachbereich / Abteilung</label>
+                <select class="form-control" id="department" name="department" required>
+                    <option value="" disabled selected>Wählen Sie einen Fachbereich</option>
+                    <option value="Maschinenbau, Verfahrenstechnik und Maritime Technologien">Maschinenbau, Verfahrenstechnik und Maritime Technologien</option>
+                    <option value="Energy and Life Science">Energy and Life Science</option>
+                    <option value="Information und Kommunikation">Information und Kommunikation</option>
+                    <option value="Wirtschaft">Wirtschaft</option>
+                    <option value="CIEL">Center for International Education and Lifelong Learning</option>
+                    <option value="(JZF)">Jackstädt-Zentrum Flensburg</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Kurzbeschreibung</label>
+                <textarea class="form-control" id="description" name="description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="sws">Semesterwochenstunden (SWS)</label>
+                <input type="number" class="form-control" id="sws" name="sws" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ects">ECTS-Leistungspunkte (CP)</label>
+                <input type="number" class="form-control" id="ects" name="ects" required>
+            </div>
+
+            <div class="form-group">
+                <h4>Arbeitsaufwand (Zeitstunden)</h4>
+                <label for="lecture_type">Art der Lehrveranstaltungen</label>
+                <input type="text" class="form-control" id="lecture_type" name="lecture_type" placeholder="Zum Beispiel: Vorlesung, Seminar, Labor, Tutorium, …">
+            </div>
+
+            <div class="form-group">
+                <label for="presence_time">Präsenz (Zeitstunden)</label>
+                <input type="number" class="form-control" id="presence_time" name="presence_time" oninput="calculateTotalHours()">
+            </div>
+
+            <div class="form-group">
+                <label for="self_study_time">Selbststudium (Zeitstunden)</label>
+                <input type="number" class="form-control" id="self_study_time" name="self_study_time" oninput="calculateTotalHours()">
+            </div>
+
+            <div class="form-group">
+                <label for="total_hours">Gesamt (Zeitstunden)</label>
+                <input type="number" class="form-control" id="total_hours" name="total_hours" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="module_type">Modultyp:</label>
+                <select class="form-control" id="module_type" name="module_type" placeholder="Bitte wählen Sie...">
+                    <option value="" disabled selected>Wählen Sie einen Modultyp</option>
+                    <option value="Pflicht">Pflicht</option>
+                    <option value="Wahlpflicht">Wahlpflicht</option>
+                    <option value="Wahl">Wahl</option>
+                </select>
+            </div>
+        
+           
+
+            <div class="form-group">
+                <label for="qualifications">Überfachliche Qualifikationen
+                    <span class="info-icon" tabindex="0" aria-label="Ist dieses Modul auch in anderen Studiengängen verwendbar bzw. für andere Studiengänge relevant? ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M13 16h-2v-6h2v6zm-1-10.25c.69 0 1.25.56 1.25 1.25s-.56 1.25-1.25 1.25-1.25-.56-1.25-1.25.56-1.25 1.25-1.25zm0-2.75c5.514 0 10 3.592 10 8.007 0 4.917-5.145 7.961-9.91 7.961-1.937 0-3.383-.397-4.394-.644-1 .613-1.595 1.037-4.272 1.82.535-1.373.723-2.748.602-4.265-.838-1-2.025-2.4-2.025-4.872-.001-4.415 4.485-8.007 9.999-8.007zm0-2c-6.338 0-12 4.226-12 10.007 0 2.05.738 4.063 2.047 5.625.055 1.83-1.023 4.456-1.993 6.368 2.602-.47 6.301-1.508 7.978-2.536 1.418.345 2.775.503 4.059.503 7.084 0 11.91-4.837 11.91-9.961-.001-5.811-5.702-10.006-12.001-10.006z"/>
+                        </svg>
+                    </span>
+                </label>                
+                <select class="form-control" id="qualifications" name="qualifications" required>
+                    <option value="" disabled selected>Bitte wählen...</option>
+                    <option value="Ja">Ja</option>
+                    <option value="Nein">Nein</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Wird angeboten im <span class="info-icon" tabindex="0" aria-label="Bitte wählen Sie die Semester aus, in denen das Modul angeboten wird.">ℹ️</span></label>
+                <div class="d-flex flex-column" style="margin-left: -60px;"> <!-- Optional: margin-left for alignment -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="winter_semester" name="semesters" value="Wintersemester">
+                        <label class="form-check-label" for="winter_semester">Wintersemester</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="summer_semester" name="semesters" value="Sommersemester">
+                        <label class="form-check-label" for="summer_semester">Sommersemester</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="prerequisites_formal">Formale Voraussetzungen</label>
+                <textarea class="form-control" id="prerequisites_formal" name="prerequisites_formal"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="prerequisites_content">Inhaltliche Voraussetzungen</label>
+                <textarea class="form-control" id="prerequisites_content" name="prerequisites_content"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="curriculum">Zuordnung zum Curriculum</label>
+                <textarea class="form-control" id="curriculum" name="curriculum"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="language_of_instruction">Unterrichtssprache</label>
+                <input type="text" class="form-control" id="language_of_instruction" name="language_of_instruction">
+            </div>
+
+            <div class="form-group">
+                <label for="exam_type">Prüfungsart</label>
+                <input type="text" class="form-control" id="exam_type" name="exam_type">
+            </div>
+
+            <div class="form-group">
+                <label for="exam_format_duration">Prüfungsform, -dauer, -umfang</label>
+                <textarea class="form-control" id="exam_format_duration" name="exam_format_duration"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="exam_language">Prüfungssprache</label>
+                <input type="text" class="form-control" id="exam_language" name="exam_language">
+            </div>
+
+            <div class="form-group">
+                <label for="requirements_for_credits">Voraussetzungen für den Erwerb der Leistungspunkte</label>
+                <textarea class="form-control" id="requirements_for_credits" name="requirements_for_credits"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="module_responsible">Modulverantwortliche*r</label>
+                <input type="text" class="form-control" id="module_responsible" name="module_responsible">
+            </div>
+
+            <div class="form-group">
+                <label for="registration">Anmeldung über</label>
+                <input type="text" class="form-control" id="registration" name="registration">
+            </div>
+        </div>
+        
+        <div class="form-card">
+            <h1>Inhalte</h1>
+            <div class="form-group">
+                <label for="knowledge">Kenntnisse</label>
+                <textarea class="form-control" id="knowledge" name="knowledge"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="skills">Fertigkeiten</label>
+                <textarea class="form-control" id="skills" name="skills"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="competences">Kompetenzen</label>
+                <textarea class="form-control" id="competences" name="competences"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="contents">Inhalte</label>
+                <textarea class="form-control" id="contents" name="contents"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="teaching_mode">Lehrmodus</label>
+                <input type="text" class="form-control" id="teaching_mode" name="teaching_mode">
+            </div>
+
+            <div class="form-group">
+                <label for="learning_mode">Lernmodus</label>
+                <input type="text" class="form-control" id="learning_mode" name="learning_mode">
+            </div>
+
+            <div class="form-group">
+                <label for="literature">Literatur</label>
+                <textarea class="form-control" id="literature" name="literature"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="equipment_costs">Ausrüstung und Kosten</label>
+                <textarea class="form-control" id="equipment_costs" name="equipment_costs"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="miscellaneous">Sonstiges</label>
+                <textarea class="form-control" id="miscellaneous" name="miscellaneous"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="last_update">Letzte Aktualisierung</label>
+                <input type="date" class="form-control" id="last_update" name="last_update">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Speichern</button>
+        </form>
+    </div>
+</div>
+    <a href="/modules" class="btn btn-secondary mt-3">Gespeicherte Modulbeschreibungen anzeigen</a>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulbeschreibung - {{ module.module_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='app\static\export_styles.css') }}">
+</head>
+<body>
+    <body>
+        <h1>Modulbeschreibung: {{module.module_name}}</h1>
+        <h2>Modulkürzel: {{module.module_code}}</h2>
+        
+        <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <th>Fachbereich</th>
+                <td>{{module.department}}</td>
+            </tr>
+            <tr>
+                <th>Kurzbeschreibung</th>
+                <td>{{module.description}}</td>
+            </tr>
+            <tr>
+                <th>SWS</th>
+                <td>{{module.sws}}</td>
+            </tr>
+            <tr>
+                <th>ECTS</th>
+                <td>{{module.ects}}</td>
+            </tr>
+            <tr>
+                <th>Art der Lehrveranstaltungen</th>
+                <td>{{module.lecture_type}}</td>
+            </tr>
+            <tr>
+                <th>Präsenzzeit</th>
+                <td>{{module.presence_time}} Stunden</td>
+            </tr>
+            <tr>
+                <th>Selbststudium</th>
+                <td>{{module.self_study_time}} Stunden</td>
+            </tr>
+            <tr>
+                <th>Gesamtstunden</th>
+                <td>{{module.total_hours}} Stunden</td>
+            </tr>
+            <tr>
+                <th>Modultyp</th>
+                <td>{{module.module_type}}</td>
+            </tr>
+            <tr>
+                <th>Überfachliche Qualifikationen</th>
+                <td>{{module.qualifications}}</td>
+            </tr>
+            <tr>
+                <th>Wird angeboten im</th>
+                <td>{{module.semesters}}</td>
+            </tr>
+            <tr>
+                <th>Voraussetzungen (formal)</th>
+                <td>{{module.prerequisites_formal}}</td>
+            </tr>
+            <tr>
+                <th>Voraussetzungen (inhaltlich)</th>
+                <td>{{module.prerequisites_content}}</td>
+            </tr>
+            <tr>
+                <th>Zuordnung zum Curriculum</th>
+                <td>{{module.curriculum}}</td>
+            </tr>
+            <tr>
+                <th>Unterrichtssprache</th>
+                <td>{{module.language_of_instruction}}</td>
+            </tr>
+            <tr>
+                <th>Prüfungsart</th>
+                <td>{{module.exam_type}}</td>
+            </tr>
+            <tr>
+                <th>Prüfungsform, -dauer, -umfang</th>
+                <td>{{module.exam_format_duration}}</td>
+            </tr>
+            <tr>
+                <th>Prüfungssprache</th>
+                <td>{{module.exam_language}}</td>
+            </tr>
+            <tr>
+                <th>Voraussetzungen für Leistungspunkte</th>
+                <td>{{module.requirements_for_credits}}</td>
+            </tr>
+            <tr>
+                <th>Modulverantwortliche*r</th>
+                <td>{{module.module_responsible}}</td>
+            </tr>
+            <tr>
+                <th>Anmeldung über</th>
+                <td>{{module.registration}}</td>
+            </tr>
+            <tr>
+                <th>Kentnisse</th>
+                <td>{{module.knowledge}}</td>
+            </tr>
+            <tr>
+                <th>Fertigkeiten</th>
+                <td>{{module.skills}}</td>
+            </tr>
+            <tr>
+                <th>Kompetenzen</th>
+                <td>{{module.competences}}</td>
+            </tr>
+            <tr>
+                <th>Inhalte</th>
+                <td>{{module.contents}}</td>
+            </tr>
+            <tr>
+                <th>Lehrmodus</th>
+                <td>{{module.teaching_mode}}</td>
+            </tr>
+            <tr>
+                <th>Lernmodus</th>
+                <td>{{module.learning_mode}}</td>
+            </tr>
+            <tr>
+                <th>Literatur</th>
+                <td>{{module.literature}}</td>
+            </tr>
+            <tr>
+                <th>Ausstattungskosten</th>
+                <td>{{module.equipment_costs}}</td>
+            </tr>
+            <tr>
+                <th>Sonstiges</th>
+                <td>{{module.miscellaneous}}</td>
+            </tr>
+            <tr>
+                <th>Letzte Aktualisierung</th>
+                <td>{{module.last_update}}</td>
+            </tr>
+        </table>
+    </body>
+</body>
+</html>
